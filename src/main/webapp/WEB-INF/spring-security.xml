@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+            http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd
+            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+	
+        <security:http pattern="/resources/**"			security="none" />
+        <security:http pattern="/template/**"			security="none" />
+        <security:http pattern="/views/**"			security="none" />
+        <security:http pattern="/favicon.ico"			security="none" />
+        <security:http pattern="/index.html*"			security="none" />
+        <security:http pattern="/login.jsp*"			security="none" />
+    
+        <security:http auto-config="true" entry-point-ref="customAuthenticationEntryPoint" >
+                <security:form-login login-page="/login.jsp" default-target-url="/pages/principal/" authentication-failure-url="/login.jsp" authentication-success-handler-ref="authenticationSuccessHandler" />
+                
+                <security:intercept-url pattern="/pages/usuario/verificar/"                             access="IS_AUTHENTICATED_ANONYMOUSLY" />
+                
+                <security:intercept-url pattern="/pages/apostas/**"                                     access="ROLE_ADMIN, ROLE_VISITANTE" />
+                <security:intercept-url pattern="/pages/aposta/**"                                      access="ROLE_ADMIN" />
+                
+                <security:intercept-url pattern="/pages/usuario/logado"                                 access="ROLE_ADMIN, ROLE_VISITANTE" />
+                <security:intercept-url pattern="/pages/usuario/**"                                     access="ROLE_ADMIN" />
+                
+                <!-- caso nao tenha filtros restritivos acima, ao menos deve estar logado -->
+                <!-- a verificacao eh de cima para baixo -->
+                <security:intercept-url pattern="/pages/**"                                             access="ROLE_GERAL" />
+        </security:http>
+    
+        <bean id="customAuthenticationEntryPoint" class="com.jopss.apostas.servicos.security.CustomAuthenticationEntryPoint">
+                <property name="loginFormUrl" value="/login.jsp" />
+        </bean>
+
+        <bean id="baseTransactionProxy" abstract="true" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+                <property name="transactionManager" ref="transactionManager"/>
+                <property name="transactionAttributes">
+                        <props>
+                                <prop key="*">PROPAGATION_REQUIRED</prop>                
+                        </props>
+                </property>
+        </bean>
+    
+        <bean id="authenticationSuccessHandler" parent="baseTransactionProxy">
+                <property name="target">
+                        <bean  class="com.jopss.apostas.servicos.security.CustomAuthenticationSuccessFilter" >
+                                <property name="defaultTargetUrl" value="/pages/principal/" />
+                        </bean>
+                </property>
+        </bean>
+    
+        <bean id="customUserDetailService" class="com.jopss.apostas.servicos.security.CustomUserDetailService" />
+    
+        <security:authentication-manager alias="authenticationManager">
+                <security:authentication-provider user-service-ref="customUserDetailService" >
+                        <security:password-encoder hash="md5" />
+                </security:authentication-provider>
+        </security:authentication-manager>
+
+        <!--	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+                <property name="basenames">
+                        <list>
+                                <value>customSpringMessages</value>
+                        </list>
+                </property>
+        </bean>-->
+
+</beans>
