@@ -14,7 +14,7 @@
         <security:http pattern="/login.jsp*"			security="none" />
     
         <security:http auto-config="true" entry-point-ref="customAuthenticationEntryPoint" >
-                <security:form-login login-page="/login.jsp" default-target-url="/pages/principal/" authentication-failure-url="/login.jsp" authentication-success-handler-ref="authenticationSuccessHandler" />
+                <security:form-login login-page="/login.jsp" default-target-url="/pages/principal/" authentication-failure-url="/login.jsp" />
                 
                 <security:intercept-url pattern="/pages/usuario/verificar/"                             access="IS_AUTHENTICATED_ANONYMOUSLY" />
                 
@@ -32,23 +32,6 @@
         <bean id="customAuthenticationEntryPoint" class="com.jopss.apostas.servicos.security.CustomAuthenticationEntryPoint">
                 <property name="loginFormUrl" value="/login.jsp" />
         </bean>
-
-        <bean id="baseTransactionProxy" abstract="true" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
-                <!--<property name="transactionManager" ref="transactionManager"/>-->
-                <property name="transactionAttributes">
-                        <props>
-                                <prop key="*">PROPAGATION_REQUIRED</prop>                
-                        </props>
-                </property>
-        </bean>
-    
-        <bean id="authenticationSuccessHandler" parent="baseTransactionProxy">
-                <property name="target">
-                        <bean  class="com.jopss.apostas.servicos.security.CustomAuthenticationSuccessFilter" >
-                                <property name="defaultTargetUrl" value="/pages/principal/" />
-                        </bean>
-                </property>
-        </bean>
     
         <bean id="customUserDetailService" class="com.jopss.apostas.servicos.security.CustomUserDetailService" />
     
@@ -57,13 +40,5 @@
                         <security:password-encoder hash="md5" />
                 </security:authentication-provider>
         </security:authentication-manager>
-
-        <!--	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
-                <property name="basenames">
-                        <list>
-                                <value>customSpringMessages</value>
-                        </list>
-                </property>
-        </bean>-->
 
 </beans>

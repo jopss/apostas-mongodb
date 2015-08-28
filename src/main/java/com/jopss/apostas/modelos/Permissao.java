@@ -19,7 +19,7 @@ public class Permissao extends Modelos {
 
         @JsonIgnore
         @DBRef
-        private Permissao permissao_pai;
+        private Permissao permissaoPai;
 
         @Override
         public String getId() {
@@ -42,12 +42,12 @@ public class Permissao extends Modelos {
                 this.descricao = descricao;
         }
 
-        public Permissao getPermissao_pai() {
-                return permissao_pai;
+        public Permissao getPermissaoPai() {
+                return permissaoPai;
         }
 
-        public void setPermissao_pai(Permissao permissao_pai) {
-                this.permissao_pai = permissao_pai;
+        public void setPermissaoPai(Permissao permissaoPai) {
+                this.permissaoPai = permissaoPai;
         }
 
         public RoleEnum getPapel() {

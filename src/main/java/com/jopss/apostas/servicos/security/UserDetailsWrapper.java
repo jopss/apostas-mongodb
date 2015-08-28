@@ -21,8 +21,10 @@ public class UserDetailsWrapper implements UserDetails{
 		this.usuario = usuario;
 		this.authorities = new ArrayList<>();
                 
-                for(Permissao permissao : usuario.getPerfil().getPermissoes()){
-                        this.authorities.add(new SimpleGrantedAuthority(permissao.getPapel().name()));
+                if(usuario.getPerfil()!=null && usuario.getPerfil().getPermissoes() != null){
+                        for(Permissao permissao : usuario.getPerfil().getPermissoes()){
+                                this.authorities.add(new SimpleGrantedAuthority(permissao.getPapel().name()));
+                        }
                 }
 	}
 	
