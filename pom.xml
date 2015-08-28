@@ -118,6 +118,11 @@
                 </dependency>
                 
                 <dependency>
+                        <groupId>com.github.mongobee</groupId>
+                        <artifactId>mongobee</artifactId>
+                        <version>0.10</version>
+                </dependency>
+                <dependency>
                         <groupId>org.springframework.data</groupId>
                         <artifactId>spring-data-mongodb</artifactId>
                         <version>${version-spring-data}</version>
@@ -131,11 +136,6 @@
                         <groupId>org.mongeez</groupId>
                         <artifactId>mongeez</artifactId>
                         <version>0.9.4</version>
-                </dependency>
-                <dependency>
-                        <groupId>org.apache.commons</groupId>
-                        <artifactId>commons-lang3</artifactId>
-                        <version>3.4</version>
                 </dependency>
 
                 <!-- JSON -->

@@ -12,20 +12,16 @@
         <data:repositories base-package="com.jopss.apostas.servicos.repositorio" />
         
         <data:mongo host="${mongodb.uri}" port="${mongodb.port}" />
-        <data:db-factory dbname="apostas" />
+        <data:db-factory dbname="${mongodb.name}" />
 
         <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
                 <constructor-arg name="mongoDbFactory" ref="mongoDbFactory" />
         </bean>
         
-        
-        <bean id="mongeez" class="org.mongeez.MongeezRunner" depends-on="mongo">
-                <property name="mongo" ref="mongo"/>
-<!--                <property name="userName" value="${mongodb.user}"/>
-                <property name="passWord" value="${mongodb.passwd}"/>-->
-                <property name="executeEnabled" value="${mongodb.migrate}"/>
+        <bean id="mongobee" class="com.github.mongobee.Mongobee">
+                <constructor-arg value="mongodb://${mongodb.uri}:${mongodb.port}/${mongodb.name}"/> 
                 <property name="dbName" value="${mongodb.name}"/>
-                <property name="file" value="classpath:db/mongeez.xml"/>
+                <property name="enabled" value="true"/>
+                <property name="changeLogsScanPackage" value="com.jopss.apostas.db.migration"/>
         </bean>
-        
 </beans>
