@@ -4,10 +4,6 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.log4j.Logger;
@@ -21,22 +17,17 @@ import org.springframework.data.repository.CrudRepository;
  * inves de delegar ao container), pois os modelos nao sao gerenciados pelo
  * Spring.
  */
-@MappedSuperclass
 @JsonAutoDetect(fieldVisibility=Visibility.ANY, getterVisibility = Visibility.NONE, isGetterVisibility = Visibility.NONE, setterVisibility = Visibility.NONE)
 public abstract class Modelos implements Serializable {
         
 	protected static final Logger logger = Logger.getLogger(Modelos.class);
 	private static final long serialVersionUID = -1340481266616282366L;
         
-	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataCriacao = new Date();
-        
-	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataAtualizacao;
         
-	public abstract Long getId();
+	public abstract String getId();
         
-        @Transient
         private CrudRepository repository;
         
 	@Override

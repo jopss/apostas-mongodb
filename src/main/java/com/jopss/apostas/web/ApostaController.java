@@ -25,7 +25,7 @@ public class ApostaController extends ApostasController {
         
         @ResponseBody
         @RequestMapping(value = "/aposta/{id}", method = RequestMethod.DELETE)
-	public Resposta deletar(@PathVariable Long id, HttpServletResponse resp) {
+	public Resposta deletar(@PathVariable String id, HttpServletResponse resp) {
                 Resposta resposta = new Resposta();
                 try {
                         new Aposta(id).remover();
@@ -43,7 +43,7 @@ public class ApostaController extends ApostasController {
         
         @ResponseBody
         @RequestMapping(value = "/aposta/{id}", method = RequestMethod.GET)
-	public Resposta editar(@PathVariable Long id, HttpServletResponse resp) {
+	public Resposta editar(@PathVariable String id, HttpServletResponse resp) {
                 Resposta resposta = new Resposta();
                 try {
                         resposta.setModelo(new Aposta(id).buscarPorId(), resp);

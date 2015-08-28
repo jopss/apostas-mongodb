@@ -3,13 +3,9 @@ package com.jopss.apostas.web.form;
 import com.jopss.apostas.util.FormatterAndValues;
 import com.jopss.apostas.util.Modelos;
 import java.io.Serializable;
-import java.sql.BatchUpdateException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 import org.springframework.transaction.TransactionSystemException;
 
 public class Resposta implements Serializable {
@@ -64,17 +60,6 @@ public class Resposta implements Serializable {
         public void addErroGenerico(Exception ex, HttpServletResponse resp) {
                 Throwable cause = ex.getCause();
                 resp.setStatus(HTTP_STATUS_ERROR);
-                if (cause instanceof org.hibernate.exception.ConstraintViolationException) {
-                        org.hibernate.exception.ConstraintViolationException hib = (org.hibernate.exception.ConstraintViolationException) cause;
-                        if (hib.getCause() instanceof BatchUpdateException) {
-                                BatchUpdateException bete = ((BatchUpdateException) hib.getCause());
-                                String str = bete.getNextException().getMessage();
-                                if (str != null && str.toLowerCase().contains("duplicate key")) {
-                                        getMensagens().add(new Retorno("erro", "Campo duplicado."));
-                                        return;
-                                }
-                        }
-                }
                 getMensagens().add(new Retorno("mensagem", ex.getMessage()));
         }
 
@@ -89,7 +74,7 @@ public class Resposta implements Serializable {
                 getMensagens().add(new Retorno("mensagem", FormatterAndValues.getMessage(str)));
                 resp.setStatus(HTTP_STATUS_VALIDATION);
         }
-        
+
         public void addErroLogin(String str) {
                 getMensagens().add(new Retorno("mensagem", str));
         }
@@ -102,18 +87,7 @@ public class Resposta implements Serializable {
          * @param resp HttpServletResponse
          */
         public void addErros(TransactionSystemException ex, HttpServletResponse resp) {
-                if (ex.getRootCause() instanceof ConstraintViolationException) {
-                        ConstraintViolationException exContrain = (ConstraintViolationException) ex.getRootCause();
-                        Set<ConstraintViolation<?>> constraintViolations = exContrain.getConstraintViolations();
-                        if (constraintViolations != null) {
-                                for (ConstraintViolation cons : constraintViolations) {
-                                        getMensagens().add(new Retorno(cons.getPropertyPath().toString(), cons.getMessage()));
-                                }
-                                resp.setStatus(HTTP_STATUS_VALIDATION);
-                        }
-                } else {
-                        this.addErroGenerico(ex, resp);
-                }
+                this.addErroGenerico(ex, resp);
         }
 
         public List<Retorno> getMensagens() {

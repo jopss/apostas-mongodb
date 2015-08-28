@@ -1,9 +1,7 @@
 package com.jopss.apostas.servicos.repositorio;
 
 import com.jopss.apostas.modelos.Aposta;
-import com.jopss.apostas.util.ApostaHQLGenerator;
 import java.util.Date;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,15 +17,15 @@ public class ApostaRepositoryImpl implements ApostaRepositoryCustom{
         @Override
         @Transactional
         public Page<Aposta> findByDateFinalizacaoBetweenAndDescricao(Date dataInicial, Date dataFinal, String descricao, Pageable page) {
-                ApostaHQLGenerator queryGenerator = new ApostaHQLGenerator();
-                queryGenerator.filtrarPorDatas(dataInicial, dataFinal);
-                queryGenerator.filtrarPorDescricao(descricao);
-                queryGenerator.ordenarPorDataDesc();
-                Page<Aposta> pagina = repositorio.buscarPaginado(queryGenerator, page);
-                
-                for(Aposta aposta : pagina.getContent()){
-                        Hibernate.initialize(aposta.getPalpites());
-                }
-                return pagina;
+//                ApostaHQLGenerator queryGenerator = new ApostaHQLGenerator();
+//                queryGenerator.filtrarPorDatas(dataInicial, dataFinal);
+//                queryGenerator.filtrarPorDescricao(descricao);
+//                queryGenerator.ordenarPorDataDesc();
+//                Page<Aposta> pagina = repositorio.buscarPaginado(queryGenerator, page);
+//                
+//                for(Aposta aposta : pagina.getContent()){
+//                        Hibernate.initialize(aposta.getPalpites());
+//                }
+                return null;
         }
 }

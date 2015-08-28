@@ -2,7 +2,6 @@ package com.jopss.apostas.web.util;
 
 import com.jopss.apostas.modelos.Usuario;
 import com.jopss.apostas.servicos.security.SessionUserSupport;
-import com.jopss.apostas.util.FormatterAndValues;
 import com.jopss.apostas.util.NumbersUtils;
 import com.jopss.apostas.servicos.ParametrosSistema;
 import com.jopss.apostas.util.ValidatorUtil;
@@ -15,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  * Superclasse de todo Controlador do sistema.
@@ -37,7 +35,7 @@ public abstract class ApostasController {
 			@Override
 			public void setAsText(String text) throws IllegalArgumentException {
 				if (ValidatorUtil.isNotNullAndNotEmpty(text)) {
-					setValue(new Usuario(Long.valueOf(text)).buscarPorId());
+					setValue(new Usuario(text, null).buscarPorId());
 				} else {
 					setValue(null);
 				}
