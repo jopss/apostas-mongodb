@@ -20,7 +20,7 @@ public class Palpite extends Modelos {
         private Usuario usuario;
         
         @JsonIgnore
-        @DBRef
+        @DBRef(lazy = true)
         private Aposta aposta;
 
         public Palpite() {

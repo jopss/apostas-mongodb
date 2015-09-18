@@ -26,6 +26,8 @@ public class ApostaRepositoryImpl implements ApostaRepositoryCustom{
 //                for(Aposta aposta : pagina.getContent()){
 //                        Hibernate.initialize(aposta.getPalpites());
 //                }
+                
+                
                 return null;
         }
 }

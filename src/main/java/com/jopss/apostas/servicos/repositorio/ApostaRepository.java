@@ -4,9 +4,9 @@ import com.jopss.apostas.modelos.Aposta;
 import java.util.Date;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface ApostaRepository extends PagingAndSortingRepository<Aposta, String>, ApostaRepositoryCustom {
+public interface ApostaRepository extends MongoRepository<Aposta, String>, ApostaRepositoryCustom {
 
         Page<Aposta> findByDateFinalizacaoBetween(Date dataInicial, Date dataFinal, Pageable page);
 

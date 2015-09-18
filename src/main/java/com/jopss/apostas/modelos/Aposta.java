@@ -29,7 +29,7 @@ public class Aposta extends Modelos {
         @JsonDeserialize(using = JsonDateDeserializer.class)
         private Date dateFinalizacao;
 
-        @DBRef
+        @DBRef(lazy = true)
         private List<Palpite> palpites;
 
         public Aposta() {
@@ -56,8 +56,8 @@ public class Aposta extends Modelos {
                                 throw new DataNaoPermitidaException("aposta.falha.intervalo_data_invalido");
                         }
 
-                        pagina = this.getRepository().findByDateFinalizacaoBetweenAndDescricao(
-                                form.getDataInicial(), form.getDataFinal(),form.getDescricao() , pageRequest);
+                        pagina = this.getRepository().findByDateFinalizacaoBetween(
+                                form.getDataInicial(), form.getDataFinal(), pageRequest);
 
                 } else {
                         pagina = this.getRepository().findAll(pageRequest);
@@ -73,11 +73,18 @@ public class Aposta extends Modelos {
                 if (this.dateFinalizacao.before(DateUtilsApostas.arredondaDataZerandoHora(new Date()))) {
                         throw new DataNaoPermitidaException("aposta.falha.data_nao_permitida");
                 }
+                
+                List<Palpite> palpites = this.getPalpites();
+                this.palpites = null;
+                
+                Aposta aposta = this.getRepository().save(this);
 
-                for (Palpite palpite : this.getPalpites()) {
-                        palpite.setAposta(this);
+                for (Palpite palpite : palpites) {
+                        palpite.setAposta(aposta);
+                        palpite.salvar();
                 }
-                return this.getRepository().save(this);
+                aposta.palpites = palpites;
+                return this.getRepository().save(aposta);
         }
 
         public void remover() throws ApostasException {
